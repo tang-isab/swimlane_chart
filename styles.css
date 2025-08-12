@@ -29,7 +29,8 @@ body {
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    overflow: hidden;
+    overflow-x: auto;
+    overflow-y: visible;
     display: flex;
     flex-direction: column;
     min-height: 500px;
@@ -91,6 +92,25 @@ header h1 {
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 14px;
+}
+
+/* Color input specific styling for Chrome/Edge */
+input[type="color"] {
+    padding: 2px !important;
+    width: 50px;
+    height: 40px;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+input[type="color"]::-webkit-color-swatch {
+    border: none;
+    border-radius: 2px;
 }
 
 .controls button {
@@ -162,52 +182,57 @@ header h1 {
 }
 
 .timeline-header {
-    display: flex;
-    background-color: #ecf0f1;
-    border-bottom: 2px solid #bdc3c7;
+    display: grid;
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
     position: sticky;
     top: 0;
     z-index: 10;
     flex-shrink: 0;
     min-height: 60px;
+    width: max-content;
+    min-width: 100%;
 }
 
 .swimlanes-container {
     flex: 1;
-    overflow-x: auto;
-    overflow-y: auto;
+    overflow: visible;
     min-height: 400px;
     position: relative;
-    background-color: #fafafa;
+    background-color: white;
 }
 
 .timeline-header .week-header {
-    min-width: 120px;
     padding: 15px 10px;
     text-align: center;
     font-weight: bold;
-    border-right: 1px solid #bdc3c7;
-    background-color: #34495e;
+    border-right: 1px solid #dee2e6;
+    background-color: #495057;
     color: white;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .timeline-header .week-header:first-child {
-    min-width: 200px;
-    background-color: #2c3e50;
+    background-color: #343a40;
 }
 
 .swimlane {
-    display: flex;
-    border-bottom: 1px solid #ecf0f1;
+    display: grid;
+    border-bottom: 1px solid #ddd;
     min-height: 80px;
     position: relative;
+    background-color: white;
+    width: max-content;
+    min-width: 100%;
 }
 
 .swimlane-label {
-    min-width: 200px;
     padding: 20px;
     background-color: #f8f9fa;
-    border-right: 1px solid #bdc3c7;
+    border-right: 2px solid #dee2e6;
     display: flex;
     align-items: center;
     font-weight: bold;
@@ -216,15 +241,19 @@ header h1 {
 }
 
 .swimlane-weeks {
-    display: flex;
-    flex: 1;
-    position: relative;
+    display: contents;
 }
 
 .week-column {
-    min-width: 120px;
-    border-right: 1px solid #ecf0f1;
+    border-right: 1px solid #dee2e6;
     position: relative;
+    background-color: white;
+    box-sizing: border-box;
+    min-height: 80px;
+}
+
+.week-column:hover {
+    background-color: #f8f9fa;
 }
 
 .task {

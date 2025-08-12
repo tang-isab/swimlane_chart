@@ -126,9 +126,9 @@ class SwimlaneTracker {
             this.importProject(e.target.files[0]);
         });
 
-        document.getElementById('reset-project').addEventListener('click', () => {
+        document.getElementById('reset-project').addEventListener('click', async () => {
             if (confirm('Are you sure you want to reset to the default project? All current data will be lost.')) {
-                this.resetToDefault();
+                await this.resetToDefault();
             }
         });
 
@@ -139,10 +139,13 @@ class SwimlaneTracker {
             });
         });
 
-        // Cancel buttons
-        document.getElementById('cancel-task').addEventListener('click', () => {
-            this.closeModal(document.getElementById('task-modal'));
-        });
+        // Clear task button
+        const clearTaskBtn = document.getElementById('clear-task');
+        if (clearTaskBtn) {
+            clearTaskBtn.addEventListener('click', () => {
+                this.clearTaskForm();
+            });
+        }
 
         document.getElementById('cancel-swimlane').addEventListener('click', () => {
             this.closeModal(document.getElementById('swimlane-modal'));
@@ -187,6 +190,9 @@ class SwimlaneTracker {
         }
         
         console.log('Rendering timeline with', this.weeks, 'weeks');
+        
+        // Set up CSS Grid with proper columns
+        timelineHeader.style.gridTemplateColumns = `200px repeat(${this.weeks}, 120px)`;
         timelineHeader.innerHTML = '';
 
         // Add swimlane label header
@@ -220,6 +226,9 @@ class SwimlaneTracker {
             const swimlaneDiv = document.createElement('div');
             swimlaneDiv.className = 'swimlane';
             swimlaneDiv.dataset.swimlaneId = swimlane.id;
+            
+            // Set up CSS Grid with same column structure as header
+            swimlaneDiv.style.gridTemplateColumns = `200px repeat(${this.weeks}, 120px)`;
 
             // Swimlane label
             const labelDiv = document.createElement('div');
@@ -239,24 +248,21 @@ class SwimlaneTracker {
             swimlaneDiv.appendChild(labelDiv);
 
             // Week columns
-            const weeksDiv = document.createElement('div');
-            weeksDiv.className = 'swimlane-weeks';
-
             for (let i = 1; i <= this.weeks; i++) {
                 const weekColumn = document.createElement('div');
                 weekColumn.className = 'week-column';
-                weeksDiv.appendChild(weekColumn);
+                weekColumn.dataset.week = i;
+                swimlaneDiv.appendChild(weekColumn);
             }
 
-            swimlaneDiv.appendChild(weeksDiv);
             swimlanesContainer.appendChild(swimlaneDiv);
 
             // Render tasks for this swimlane
-            this.renderTasksForSwimlane(swimlane.id, weeksDiv);
+            this.renderTasksForSwimlane(swimlane.id, swimlaneDiv);
         });
     }
 
-    renderTasksForSwimlane(swimlaneId, weeksContainer) {
+    renderTasksForSwimlane(swimlaneId, swimlaneContainer) {
         const swimlaneTasks = this.tasks.filter(task => task.swimlane === swimlaneId);
         
         swimlaneTasks.forEach((task, index) => {
@@ -266,14 +272,12 @@ class SwimlaneTracker {
             taskDiv.textContent = task.name;
             taskDiv.style.backgroundColor = task.color;
 
-            // Position task
-            const weekWidth = 120; // Should match CSS
-            const left = (task.start - 1) * weekWidth;
-            const width = task.duration * weekWidth - 10; // -10 for gap
-
-            taskDiv.style.left = `${left + 5}px`;
-            taskDiv.style.width = `${width}px`;
+            // Position task using CSS Grid positioning
+            taskDiv.style.gridColumn = `${task.start + 1} / ${task.start + task.duration + 1}`;
+            taskDiv.style.gridRow = '1';
             taskDiv.style.top = `${20 + (index * 35)}px`;
+            taskDiv.style.zIndex = '5';
+            taskDiv.style.margin = '5px';
 
             // Check if task is blocked
             if (this.isTaskBlocked(task)) {
@@ -291,7 +295,7 @@ class SwimlaneTracker {
                 this.toggleTaskCompletion(task.id);
             });
 
-            weeksContainer.appendChild(taskDiv);
+            swimlaneContainer.appendChild(taskDiv);
         });
     }
 
@@ -615,6 +619,19 @@ class SwimlaneTracker {
         this.showTaskInPanel(task);
     }
 
+    clearTaskForm() {
+        document.getElementById('task-name').value = '';
+        document.getElementById('task-swimlane').selectedIndex = 0;
+        document.getElementById('task-start').value = 1;
+        document.getElementById('task-duration').value = 2;
+        document.getElementById('task-dependency').value = '';
+        document.getElementById('task-color').value = '#4CAF50';
+        document.getElementById('task-panel-title').textContent = 'Add New Task';
+        document.getElementById('task-submit-btn').textContent = 'Add Task';
+        document.getElementById('delete-task').style.display = 'none';
+        this.editingTask = null;
+    }
+
     deleteSwimlane(swimlaneId) {
         if (confirm('Are you sure you want to delete this swimlane? All tasks in it will be removed.')) {
             this.swimlanes = this.swimlanes.filter(s => s.id !== swimlaneId);
@@ -786,9 +803,97 @@ class SwimlaneTracker {
         reader.readAsText(file);
     }
 
-    resetToDefault() {
+    async resetToDefault() {
+        // Reset to default values
+        this.weeks = 9;
+        this.swimlanes = [
+            { id: 'marketing', name: 'Marketing' },
+            { id: 'management', name: 'Management' },
+            { id: 'webdesign', name: 'Web Design Team' }
+        ];
+        this.tasks = [
+            {
+                id: 'suggest-changes',
+                name: 'Suggest changes to website',
+                swimlane: 'marketing',
+                start: 2,
+                duration: 1,
+                color: '#FF9800',
+                dependencies: []
+            },
+            {
+                id: 'evaluate-changes',
+                name: 'Evaluate changes',
+                swimlane: 'management',
+                start: 3,
+                duration: 1,
+                color: '#2196F3',
+                dependencies: ['suggest-changes']
+            },
+            {
+                id: 'check-changes',
+                name: 'Check suggested changes',
+                swimlane: 'webdesign',
+                start: 4,
+                duration: 1,
+                color: '#2196F3',
+                dependencies: ['evaluate-changes']
+            },
+            {
+                id: 'reevaluate-changes',
+                name: 'Re-evaluate changes',
+                swimlane: 'management',
+                start: 6,
+                duration: 1,
+                color: '#2196F3',
+                dependencies: ['check-changes']
+            },
+            {
+                id: 'evaluate-new-changes',
+                name: 'Evaluate new changes',
+                swimlane: 'management',
+                start: 7,
+                duration: 1,
+                color: '#2196F3',
+                dependencies: ['reevaluate-changes']
+            },
+            {
+                id: 'implement-changes',
+                name: 'Implement changes to website',
+                swimlane: 'marketing',
+                start: 9,
+                duration: 2,
+                color: '#FF9800',
+                dependencies: ['evaluate-new-changes']
+            }
+        ];
+        
+        // Update the weeks input field
+        document.getElementById('weeks-input').value = this.weeks;
+        
+        // Clear localStorage
         localStorage.removeItem('swimlane-tracker-data');
-        location.reload();
+        
+        // Force immediate save to server without debouncing
+        if (this.useSharedStorage) {
+            // Clear any pending save timeout
+            if (this.saveTimeout) {
+                clearTimeout(this.saveTimeout);
+            }
+            
+            // Save directly to server
+            await this.saveToServer();
+        } else {
+            this.saveToLocalStorage();
+        }
+        
+        // Re-render everything
+        this.render();
+        this.updateSwimlaneSelect();
+        this.updateDependencySelect();
+        
+        // Show success message
+        this.showMessage('Reset to default project', 'success');
     }
 
     showMessage(text, type = 'info') {

@@ -1,5 +1,5 @@
 {
-  "weeks": 8,
+  "weeks": 9,
   "swimlanes": [
     {
       "id": "marketing",
@@ -78,9 +78,20 @@
       "dependencies": [
         "evaluate-new-changes"
       ]
+    },
+    {
+      "name": "test task",
+      "swimlane": "webdesign",
+      "start": 1,
+      "duration": 2,
+      "color": "#df600c",
+      "dependencies": [
+        "suggest-changes"
+      ],
+      "id": "task-1755030372935"
     }
   ],
-  "timestamp": "2025-08-12T19:39:40.056Z",
-  "lastSaved": "2025-08-12T15:39:40.065611",
-  "serverTimestamp": "2025-08-12T15:39:40.065619"
+  "timestamp": "2025-08-12T20:26:13.440Z",
+  "lastSaved": "2025-08-12T16:26:13.444531",
+  "serverTimestamp": "2025-08-12T16:26:13.444531"
 }

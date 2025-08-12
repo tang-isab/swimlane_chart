@@ -112,7 +112,7 @@ class SharedDataHandler(http.server.SimpleHTTPRequestHandler):
             response = {'success': True, 'timestamp': data['serverTimestamp']}
             self.wfile.write(json.dumps(response).encode('utf-8'))
             
-            print(f"✅ Project data saved at {data['serverTimestamp']}")
+            print(f"Project data saved at {data['serverTimestamp']}")
             
         except Exception as e:
             print(f"Error saving data: {e}")
@@ -214,26 +214,26 @@ def main():
     
     try:
         with socketserver.TCPServer(("0.0.0.0", PORT), Handler) as httpd:
-            print(f"🚀 Swimlane Project Tracker starting...")
-            print(f"📂 Serving files from: {script_dir}")
-            print(f"💾 Shared data file: {Handler.DATA_FILE}")
-            print(f"🌐 Local access: http://localhost:{PORT}")
-            print(f"🌍 Primary network IP: http://{local_ip}:{PORT}")
+            print(f"Swimlane Project Tracker starting...")
+            print(f"Serving files from: {script_dir}")
+            print(f"Shared data file: {Handler.DATA_FILE}")
+            print(f"Local access: http://localhost:{PORT}")
+            print(f"Primary network IP: http://{local_ip}:{PORT}")
             
             if all_ips:
-                print(f"📱 All available network URLs:")
+                print(f"All available network URLs:")
                 for ip in all_ips:
                     print(f"   http://{ip}:{PORT}")
             
-            print(f"📄 Opening in your browser...")
-            print(f"⏹️  Press Ctrl+C to stop the server")
+            print(f"Opening in your browser...")
+            print(f"Press Ctrl+C to stop the server")
             print(f"")
-            print(f"🤝 SHARED DATA:")
+            print(f"SHARED DATA:")
             print(f"   All users on the network will share the same project data")
             print(f"   Changes made by one person will be visible to everyone")
             print(f"   Data is stored in: {Handler.DATA_FILE}")
             print(f"")
-            print(f"🔥 FIREWALL TROUBLESHOOTING:")
+            print(f"FIREWALL TROUBLESHOOTING:")
             print(f"   If others can't access the URLs above, try:")
             print(f"   1. Run this command as Administrator in PowerShell:")
             print(f"      New-NetFirewallRule -DisplayName 'Python Server' -Direction Inbound -Protocol TCP -LocalPort {PORT} -Action Allow")
@@ -248,14 +248,14 @@ def main():
             httpd.serve_forever()
             
     except KeyboardInterrupt:
-        print("\n🛑 Server stopped by user")
+        print("\nServer stopped by user")
         sys.exit(0)
     except OSError as e:
         if "Address already in use" in str(e):
-            print(f"❌ Port {PORT} is already in use. Please close other applications using this port or try a different port.")
+            print(f"Port {PORT} is already in use. Please close other applications using this port or try a different port.")
             sys.exit(1)
         else:
-            print(f"❌ Error starting server: {e}")
+            print(f"Error starting server: {e}")
             sys.exit(1)
 
 if __name__ == "__main__":
