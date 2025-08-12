@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swimlane Project Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Swimlane Project Tracker</h1>
+            <div class="controls">
+                <label for="weeks-input">Number of Weeks:</label>
+                <input type="number" id="weeks-input" value="9" min="1" max="52">
+                <button id="update-weeks">Update</button>
+                
+                <div class="control-separator"></div>
+                
+                <button id="add-swimlane">Add Swimlane</button>
+                <button id="add-task">Add Task</button>
+                
+                <div class="control-separator"></div>
+                
+                <button id="save-project" title="Export project as JSON file">💾 Save Project</button>
+                <button id="load-project" title="Import project from JSON file">📁 Load Project</button>
+                <button id="reset-project" title="Reset to default project">🔄 Reset</button>
+                
+                <input type="file" id="file-input" accept=".json" style="display: none;">
+                
+                <div class="auto-save-indicator">
+                    🌐 Auto-saving to shared storage
+                </div>
+            </div>
+        </header>
+        
+        <div class="main-layout">
+            <div class="chart-container">
+                <div class="timeline-header" id="timeline-header">
+                    <!-- Timeline headers will be generated here -->
+                </div>
+                <div class="swimlanes-container" id="swimlanes-container">
+                    <!-- Swimlanes will be generated here -->
+                </div>
+            </div>
+            
+            <div class="task-panel">
+                <div class="task-panel-header">
+                    <h3 id="task-panel-title">Add New Task</h3>
+                </div>
+                <div class="task-panel-content">
+                    <form id="task-form">
+                        <div class="form-group">
+                            <label for="task-name">Task Name:</label>
+                            <input type="text" id="task-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="task-swimlane">Swimlane:</label>
+                            <select id="task-swimlane" required></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="task-start">Start Week:</label>
+                            <input type="number" id="task-start" min="1" value="1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="task-duration">Duration (weeks):</label>
+                            <input type="number" id="task-duration" min="1" value="2" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="task-dependency">Dependent on Task:</label>
+                            <select id="task-dependency">
+                                <option value="">None</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="task-color">Color:</label>
+                            <input type="color" id="task-color" value="#4CAF50">
+                        </div>
+                        <div class="form-buttons">
+                            <button type="submit" id="task-submit-btn">Add Task</button>
+                            <button type="button" id="clear-task">Clear</button>
+                            <button type="button" id="delete-task" style="display: none;">Delete Task</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Swimlane Modal -->
+        <div id="swimlane-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Add Swimlane</h2>
+                    <button class="close">&times;</button>
+                </div>
+                <form id="swimlane-form">
+                    <div class="form-group">
+                        <label for="swimlane-name">Swimlane Name:</label>
+                        <input type="text" id="swimlane-name" required>
+                    </div>
+                    <div class="form-buttons">
+                        <button type="submit">Add Swimlane</button>
+                        <button type="button" id="cancel-swimlane">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal backdrop for mobile -->
+    <div id="modal-backdrop" class="modal-backdrop"></div>
+    
+    <script src="script.js"></script>
+</body>
+</html>

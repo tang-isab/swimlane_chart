@@ -1,0 +1,86 @@
+{
+  "weeks": 8,
+  "swimlanes": [
+    {
+      "id": "marketing",
+      "name": "Marketing"
+    },
+    {
+      "id": "management",
+      "name": "Management"
+    },
+    {
+      "id": "webdesign",
+      "name": "Web Design Team"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "suggest-changes",
+      "name": "Suggest changes to website",
+      "swimlane": "marketing",
+      "start": 2,
+      "duration": 1,
+      "color": "#FF9800",
+      "dependencies": []
+    },
+    {
+      "id": "evaluate-changes",
+      "name": "Evaluate changes",
+      "swimlane": "management",
+      "start": 3,
+      "duration": 1,
+      "color": "#2196F3",
+      "dependencies": [
+        "suggest-changes"
+      ]
+    },
+    {
+      "id": "check-changes",
+      "name": "Check suggested changes",
+      "swimlane": "webdesign",
+      "start": 4,
+      "duration": 1,
+      "color": "#2196F3",
+      "dependencies": [
+        "evaluate-changes"
+      ]
+    },
+    {
+      "id": "reevaluate-changes",
+      "name": "Re-evaluate changes",
+      "swimlane": "management",
+      "start": 6,
+      "duration": 1,
+      "color": "#2196F3",
+      "dependencies": [
+        "check-changes"
+      ]
+    },
+    {
+      "id": "evaluate-new-changes",
+      "name": "Evaluate new changes",
+      "swimlane": "management",
+      "start": 7,
+      "duration": 1,
+      "color": "#2196F3",
+      "dependencies": [
+        "reevaluate-changes"
+      ]
+    },
+    {
+      "id": "implement-changes",
+      "name": "Implement changes to website",
+      "swimlane": "marketing",
+      "start": 9,
+      "duration": 2,
+      "color": "#FF9800",
+      "dependencies": [
+        "evaluate-new-changes"
+      ]
+    }
+  ],
+  "timestamp": "2025-08-12T19:39:40.056Z",
+  "lastSaved": "2025-08-12T15:39:40.065611",
+  "serverTimestamp": "2025-08-12T15:39:40.065619"
+}
